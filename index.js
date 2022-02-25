@@ -1,8 +1,27 @@
 const express = require('express');
 const app = express();
 const router = express.Router();
+const path = require('path');
+const dotenv = require('dotenv');
+const connectDB = require('./config/db');
 
-app.use(express.json())
+// access config
+dotenv.config({ path: './config/.env' });
+
+connectDB();
+
+
+
+
+app.use(express.json());
+
+
+
+// Middlewares
+app.use('/posts', () => {
+    console.log("this is a middleware running")
+})
+
 
 // ROUTES
 app.get('/', (req, res) => {
@@ -13,8 +32,10 @@ app.get('/posts', (req, res) => {
     res.send('hello post world');
 })
 
-const port = 8011;
 
-app.listen(port, console.log(
-    `Server running on port ${port}`
+
+const PORT = process.env.PORT || 8012;
+
+app.listen(PORT, console.log(
+    `Server running on port ${PORT}`
 ))
