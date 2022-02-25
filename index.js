@@ -4,33 +4,26 @@ const router = express.Router();
 const path = require('path');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const postsRoute = require('./routes/posts');
 
 // access config
 dotenv.config({ path: './config/.env' });
-
 connectDB();
-
-
-
 
 app.use(express.json());
 
 
 
 // Middlewares
-app.use('/posts', () => {
-    console.log("this is a middleware running")
-})
+app.use('/posts', postsRoute);
 
 
-// ROUTES
+// IMPORT ROUTES
 app.get('/', (req, res) => {
     res.send('hello world');
 })
 
-app.get('/posts', (req, res) => {
-    res.send('hello post world');
-})
+
 
 
 
