@@ -6,8 +6,43 @@ router.get('/', (req, res) => {
     res.send('hello post world');
 })
 
-router.get('/specific', async (req, res) => {
-    res.send('my specific post');
+router.get('/cities', async (req, res) => {
+
+
+    try {
+        const cities = await Cities.find();
+
+        return res.status(200).json({
+            success: true,
+            count: cities.length,
+            data: cities
+        })
+    } catch (err) {
+        res.status(404).json({
+            success: false,
+            message: 'No city found'
+        });
+    }
+
+})
+
+// get specific city
+
+router.get('/cities/:id', async (req, res) => {
+
+    try {
+        const singleCity = await Cities.findById(req.params.id);
+
+        res.status(200).json({
+            success: true,
+            data: singleCity
+        })
+    } catch (err) {
+        res.status(404).json({
+            success: false,
+            message: err
+        })
+    }
 })
 
 router.post('/', async (req, res) => {
@@ -21,12 +56,9 @@ router.post('/', async (req, res) => {
     });
 
     try {
-        if (!city) {
-            res.status(404).send('No city found')
-        }
 
         await city.save();
-        res.json(city);
+        res.status(200).json(city);
         // res.send("city added")
 
     } catch (err) {
@@ -37,5 +69,7 @@ router.post('/', async (req, res) => {
     }
 
 })
+
+
 
 module.exports = router;
