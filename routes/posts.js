@@ -26,19 +26,19 @@ router.get('/cities', async (req, res) => {
 
 })
 
-// get specific city
+// gets specific city
 
 router.get('/cities/:id', async (req, res) => {
 
     try {
         const singleCity = await Cities.findById(req.params.id);
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             data: singleCity
         })
     } catch (err) {
-        res.status(404).json({
+        return res.status(404).json({
             success: false,
             message: err
         })
@@ -58,7 +58,7 @@ router.post('/', async (req, res) => {
     try {
 
         await city.save();
-        res.status(200).json(city);
+        return res.status(200).json(city);
         // res.send("city added")
 
     } catch (err) {
@@ -70,6 +70,48 @@ router.post('/', async (req, res) => {
 
 })
 
+// deletes city
 
+router.delete('/cities/:id', async (req, res) => {
+
+    try {
+
+        const deletedCity = await Cities.remove({ _id: req.params.id });
+
+        return res.status(200).json({
+            success: true,
+            data: deletedCity,
+            message: "Item deleted"
+        })
+
+
+    } catch (err) {
+        return res.json({
+            success: false,
+            message: err
+        })
+    }
+})
+
+// update city
+
+router.patch('/cities/:id', async (req, res) => {
+    try {
+
+        const updatedCity = await Cities.updateOne({ _id: req.params.id }, { $set: { name: req.body.name } });
+
+        return res.status(200).json({
+            success: true,
+            data: updatedCity,
+            message: "Item updated"
+        })
+
+    } catch (err) {
+        return res.json({
+            success: false,
+            message: err
+        })
+    }
+})
 
 module.exports = router;
